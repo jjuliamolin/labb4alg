@@ -99,12 +99,20 @@ public class GridGraph implements DirectedGraph<GridGraph.Coord> {
         return x >= 0 && y >= 0 && x < width-1 && y < height-1 && passableChars.indexOf(grid[y][x]) >= 0;
     }
 
-
+    /**
+     *
+     * @param start
+     * @param end
+     * @return the estimated cost (length) between two nodes.
+     */
     public double guessCost(Coord start, Coord end) {
-        /********************
-         * TODO: Task 4
-         ********************/
-        return 0;
+        double cost=0;
+       double deltaX =end.x - start.x;
+       double deltaY=end.y - start.y;
+       double dist = Math.sqrt((deltaX*deltaX)+(deltaY*deltaY));
+       cost=dist;
+
+        return cost;
     }
 
 

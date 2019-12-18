@@ -92,14 +92,9 @@ public class PathFinder<V> {
 
 
     public Result<V> searchDijkstra(V start, V goal) {
-        /********************
-         * TODO: Task 1
-         ********************/
-
         int visitedNodes = 0;
         List<DirectedEdge<V>> neighbours;
         Set visited = new HashSet<V>();
-
 
         HashMap<V,Double> distTo = new HashMap<>(); //Key: V   Value: double      --> distTo("A") = 0.0 , distTo("B") = 3.0
         HashMap<V,DirectedEdge<V>> edgeTo = new HashMap<>(); // Key: V    Value: edge
@@ -108,7 +103,7 @@ public class PathFinder<V> {
             public int compare(V node1, V node2) {
                 Double dist1 = distTo.get(node1);
                 Double dist2 = distTo.get(node2);
-                return dist1.compareTo(dist2); //todo kolla att detta är rätt. eller ska det vara tvärtom ?
+                return dist1.compareTo(dist2);
             }
         });
 
@@ -121,13 +116,90 @@ public class PathFinder<V> {
 
 
         while(!toBeVisited.isEmpty()){
-            currentNode = toBeVisited.remove(); // raderar det elementet med prio (comparatorn avgör)
+            currentNode = toBeVisited.remove(); //removes the element with highest priority, the comparator decides.
 
-            if(!visited.contains(currentNode)) {
+            if(!visited.contains(currentNode)) { //only visit non-visited nodes.
                 visited.add(currentNode);
 
-                //did we find the goal?
-                if(currentNode.equals(goal)) { //TODO find path and return result
+                if(currentNode.equals(goal)) {//did we find the goal?
+                    ArrayList<V> path= new ArrayList<>();
+                    V node=currentNode;
+                    while(!node.equals(start)){ //search through path
+                        path.add(node);
+                        node = edgeTo.get(node).from();
+                    }
+                    System.out.println("success");
+                    return new Result<V>(true, start, goal, distTo.get(goal),path, visited.size());
+                }
+
+
+                neighbours = graph.outgoingEdges(currentNode);
+                for (DirectedEdge<V> edge : neighbours) {  /* RELAX */
+                    V v = edge.from(); //currentNode
+                    V w = edge.to();
+
+                    DirectedEdge<V> incomingEdge = edgeTo.get(currentNode);
+                    //System.out.println(incomingEdge);
+                    //System.out.println(edge);
+
+                  if(incomingEdge==null || !incomingEdge.equals(edge.reverse()))  {
+                      //we always want to visit unvisited nodes. if null, then visit.
+                      //only check outgoing edges. reverse incoming edges to see which one we came from.
+
+                      if (distTo.containsKey(w)) { //if there is a path registered to w already.
+                          if (distTo.get(w) > distTo.get(v) + edge.weight()) { // if the path way is cheaper
+                              Double newDist = distTo.get(v) + edge.weight();
+                              distTo.put(w, newDist); // update the new path
+                              edgeTo.put(w,edge);
+                              toBeVisited.add(w); //add to PQ
+                          }
+
+                      } else { // if we haven't visited w yet
+                          distTo.put(w, distTo.get(v) + edge.weight());
+                          edgeTo.put(w,edge);
+                          toBeVisited.add(w); //add to PQ
+                      }
+                  }
+                }
+            }
+        }
+        return new Result<>(false, start, null, -1, null, visitedNodes);
+    }
+    
+
+    public Result<V> searchAstar(V start, V goal) {
+        int visitedNodes = 0;
+        List<DirectedEdge<V>> neighbours;
+        Set visited = new HashSet<V>();
+
+        HashMap<V,Double> distTo = new HashMap<>();
+        HashMap<V,Double> estDistTo=new HashMap<>();
+        HashMap<V,DirectedEdge<V>> edgeTo = new HashMap<>();
+
+        PriorityQueue<V> toBeVisited = new PriorityQueue<>(new Comparator<V>() { // will prioritize the node with shortest estimated distance
+            @Override
+            public int compare(V node1, V node2) {
+                Double dist1 = estDistTo.get(node1);
+                Double dist2 = estDistTo.get(node2);
+                return dist1.compareTo(dist2);
+            }
+        });
+
+        /*initializing*/
+        toBeVisited.add(start);
+        neighbours = graph.outgoingEdges(start);
+        V currentNode = start;
+        distTo.put(start,0.0);
+        estDistTo.put(start,graph.guessCost(start, goal));
+
+        //Search-loop
+        while(!toBeVisited.isEmpty()){
+            currentNode = toBeVisited.remove(); //removes the element with highest priority, the comparator decides.
+
+            if(!visited.contains(currentNode)) { //only visit non-visited nodes.
+                visited.add(currentNode);
+
+                if(currentNode.equals(goal)) { //if we found the goal
                     ArrayList<V> path= new ArrayList<>();
                     V node=currentNode;
                     while(!node.equals(start)){
@@ -143,46 +215,36 @@ public class PathFinder<V> {
                 neighbours = graph.outgoingEdges(currentNode);
                 for (DirectedEdge<V> edge : neighbours) {  /* RELAX */
                     V v = edge.from(); //currentNode
-                    V w = edge.to();
+                    V w = edge.to(); //one neighbour
+
+                    double estCost=graph.guessCost(w,goal);
 
                     DirectedEdge<V> incomingEdge = edgeTo.get(currentNode);
-                    System.out.println(incomingEdge);
-                    System.out.println(edge);
-                  if(incomingEdge==null || !incomingEdge.equals(edge.reverse()))  {
-                      //directed edges, need to reverse to compare.
-                      //only check outgoingEdges.
+                    //System.out.println(incomingEdge);
+                    //System.out.println(edge);
+                    if(incomingEdge==null || !incomingEdge.equals(edge.reverse()))  {
+                        if (distTo.containsKey(w)) {
+                            if (distTo.get(w) > distTo.get(v) + edge.weight()) {
+                                Double newDist = distTo.get(v) + edge.weight();
 
-                      if (distTo.containsKey(w)) { //om det redan finns en registrerad väg till nya noden
-                          if (distTo.get(w) > distTo.get(v) + edge.weight()) { //om distTo nya noden är mindre än nuvarande värdet (kortare väg har hittats)
-                              Double newDist = distTo.get(v) + edge.weight();
-                              distTo.put(w, newDist); // uppdatera den nya (kortare vägen)
-                              edgeTo.put(w,edge);
-                              toBeVisited.add(w); //lägg till nästa node i PQ.
-                          }
+                                distTo.put(w, newDist);
+                                edgeTo.put(w,edge);
+                                estDistTo.put(w,distTo.get(w)+graph.guessCost(w,goal));
 
-                      } else { //if distTo(w)==null
-                          distTo.put(w, distTo.get(v) + edge.weight());
-                          edgeTo.put(w,edge);
-                          toBeVisited.add(w); //lägg till nästa node i PQ.
-                      }
-                  }
+                                toBeVisited.add(w);
+                            }
 
+                        } else { //if distTo(w)==null
+                            distTo.put(w, distTo.get(v) + edge.weight());
+                            edgeTo.put(w,edge);
+                            estDistTo.put(w,distTo.get(w)+graph.guessCost(w,goal));
+
+                            toBeVisited.add(w); //lägg till nästa node i PQ.
+                        }
+                    }
                 }
-
             }
-
         }
-
-
-        return new Result<>(false, start, null, -1, null, visitedNodes);
-    }
-    
-
-    public Result<V> searchAstar(V start, V goal) {
-        int visitedNodes = 0;
-        /********************
-         * TODO: Task 3
-         ********************/
         return new Result<>(false, start, null, -1, null, visitedNodes);
     }
 

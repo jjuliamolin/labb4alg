@@ -18,11 +18,34 @@ public class RunPathFinder {
 
     public static void main(String[] args) {
         try {
+            //---run from command line---
             //if (args.length != 5) throw new IllegalArgumentException();
-            //String algorithm = args[0], graphType = args[1], filePath = args[2], start = args[3], goal = args[4];
-            String algorithm = "dijkstra", graphType = "AdjacencyGraph", filePath = "src/graphs/AdjacencyGraph/citygraph-VGregion.txt", start = "Göteborg", goal = "Skövde";
 
-          //  String algorithm = "dijkstra", graphType = "WordLadder", filePath = "src/graphs/WordLadder/words-romaner.txt", start = "mamma", goal = "pappa";
+            //---task 1: Dijkstra----
+            //String algorithm = "dijkstra", graphType = "AdjacencyGraph", filePath = "src/graphs/AdjacencyGraph/citygraph-VGregion.txt", start = "Göteborg", goal = "Götene"; //158.0
+            //String algorithm = "dijkstra", graphType = "AdjacencyGraph", filePath = "src/graphs/AdjacencyGraph/citygraph-SE.txt", start = "Lund", goal = "Kiruna"; //1826.0
+            //String algorithm = "dijkstra", graphType = "NPuzzle", filePath = "3", start = "/_AB/CDE/FGH/", goal = "/CBA/DEF/_HG/"; //22.0
+            // String algorithm = "dijkstra", graphType = "NPuzzle", filePath = "3", start = "/_AB/CDE/FGH/", goal = "/ABC/DEF/GH_/"; //22.0
+            //String algorithm = "dijkstra", graphType = "GridGraph", filePath = "src/graphs/GridGraph/maze-100x50.txt", start = "1:1", goal = "199:99"; //9703 : 1216.4793641885828
+
+            //---Task 2: Dijskstra + WordLadder---
+            //String algorithm = "dijkstra", graphType = "WordLadder", filePath = "src/graphs/WordLadder/words-romaner.txt", start = "mamma", goal = "pappa"; // 338 : 6.0
+            //String algorithm = "dijkstra", graphType = "WordLadder", filePath = "src/graphs/WordLadder/words-romaner.txt", start = "katter", goal = "hundar";  //2350 : 14.0
+            //String algorithm = "dijkstra", graphType = "WordLadder", filePath = "src/graphs/WordLadder/words-romaner.txt", start = "örter", goal = "öring";   //4409 : 30.0
+
+
+            //--- Task 3: astar---
+            // String algorithm = "dijkstra", graphType="NPuzzle", filePath="3", start="/CBA/DEF/_HG/", goal="/ABC/DEF/GH_/"; //130589 : 14.0
+            // String algorithm = "astar", graphType="NPuzzle", filePath="3", start="/CBA/DEF/_HG/", goal="/ABC/DEF/GH_/";   //3720: 14.0
+
+
+            //---Task 4: astar + guessCost----
+            //String algorithm = "dijkstra", graphType="GridGraph", filePath="src/graphs/GridGraph/AR0012SR.map", start="11:73", goal="85:127";  //5654 : 147..
+            //String algorithm = "astar", graphType="GridGraph", filePath="src/graphs/GridGraph/AR0012SR.map", start="11:73", goal="85:127";   //2537 : 147...
+            //String algorithm = "dijkstra", graphType="WordLadder", filePath="src/graphs/WordLadder/words-saldo.txt", start="eller", goal="glada"; // 5984:7
+            String algorithm = "astar", graphType="WordLadder", filePath="src/graphs/WordLadder/words-saldo.txt", start="eller", goal="glada"; //100 : 7.0
+
+
 
             PathFinder<String> finder;
             switch (graphType) {
