@@ -43,7 +43,27 @@ public class RunPathFinder {
             //String algorithm = "dijkstra", graphType="GridGraph", filePath="src/graphs/GridGraph/AR0012SR.map", start="11:73", goal="85:127";  //5654 : 147..
             //String algorithm = "astar", graphType="GridGraph", filePath="src/graphs/GridGraph/AR0012SR.map", start="11:73", goal="85:127";   //2537 : 147...
             //String algorithm = "dijkstra", graphType="WordLadder", filePath="src/graphs/WordLadder/words-saldo.txt", start="eller", goal="glada"; // 5984:7
-            String algorithm = "astar", graphType="WordLadder", filePath="src/graphs/WordLadder/words-saldo.txt", start="eller", goal="glada"; //100 : 7.0
+            //String algorithm = "astar", graphType="WordLadder", filePath="src/graphs/WordLadder/words-saldo.txt", start="eller", goal="glada"; //100 : 7.0
+
+
+            //----TO ANSWERS FILE-----
+            //String algorithm = "dijkstra", graphType="AdjacencyGraph", filePath="src/graphs/AdjacencyGraph/citygraph-EU.txt", start="Volos, Greece", goal="Oulu, Finland"; //
+            //String algorithm = "astar", graphType="AdjacencyGraph", filePath="src/graphs/AdjacencyGraph/citygraph-EU.txt", start="Volos, Greece", goal="Oulu, Finland"; //
+
+            //String algorithm = "dijkstra", graphType="NPuzzle", filePath="3", start="/HFG/BED/C_A/", goal="/ABC/DEF/GH_/";
+           //String algorithm = "astar", graphType="NPuzzle", filePath="3", start="/HFG/BED/C_A/", goal="/ABC/DEF/GH_/"; //
+
+            //String algorithm = "dijkstra", graphType="NPuzzle", filePath="3", start="/HGF/BED/C_A/", goal="/ABC/DEF/GH_/"; //100 : 7.0
+            String algorithm = "astar", graphType="NPuzzle", filePath="3", start="/HGF/BED/C_A/", goal="/ABC/DEF/GH_/";
+
+
+            //String algorithm = "dijkstra", graphType="GridGraph", filePath="src/graphs/GridGraph/AR0011SR.map", start="23:161", goal="130:211";
+            //String algorithm = "astar", graphType="GridGraph", filePath="src/graphs/GridGraph/AR0011SR.map", start="23:161", goal="130:211";
+
+            //String algorithm = "dijkstra", graphType="WordLadder", filePath="src/graphs/WordLadder/words-saldo.txt", start="syster", goal="broder";
+            //String algorithm = "astar", graphType="WordLadder", filePath="src/graphs/WordLadder/words-saldo.txt", start="syster", goal="broder";
+
+
 
 
 

@@ -10,11 +10,9 @@ public class PathFinder<V> {
     private DirectedGraph<V> graph;
     private long startTimeMillis;
 
-
     public PathFinder(DirectedGraph<V> graph) {
         this.graph = graph;
     }
-
 
     public class Result<V> {
         public final boolean success;
@@ -163,7 +161,7 @@ public class PathFinder<V> {
                 }
             }
         }
-        return new Result<>(false, start, null, -1, null, visitedNodes);
+        return new Result<>(false, start, null, -1, null, visited.size());
     }
     
 
@@ -245,7 +243,7 @@ public class PathFinder<V> {
                 }
             }
         }
-        return new Result<>(false, start, null, -1, null, visitedNodes);
+        return new Result<>(false, start, null, -1, null, visited.size());
     }
 
 }

@@ -32,6 +32,7 @@ public class NPuzzle implements DirectedGraph<String> {
      * @return the edges incident on node {@code v} as a List
      */
     public List<DirectedEdge<String>> outgoingEdges(String v) {
+        //System.out.println("outgoing edges with string: " + v);
         List<DirectedEdge<String>> outgoing = new LinkedList<>();
         String w;
         int pos = v.indexOf(emptytile);
